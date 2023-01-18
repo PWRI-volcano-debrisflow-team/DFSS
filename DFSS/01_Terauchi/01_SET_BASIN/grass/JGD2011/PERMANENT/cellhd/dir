@@ -1,0 +1,12 @@
+proj:       3
+zone:       0
+north:      33:30N
+south:      33:20N
+east:       130:52:30E
+west:       130:37:30E
+cols:       2250
+rows:       1500
+e-w resol:  0:00:00.4
+n-s resol:  0:00:00.4
+format:     3
+compressed: 5

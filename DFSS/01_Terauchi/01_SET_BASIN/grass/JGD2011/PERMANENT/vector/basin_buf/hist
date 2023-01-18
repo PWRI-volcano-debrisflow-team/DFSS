@@ -1,0 +1,7 @@
+COMMAND: r.to.vect --overwrite input="basin" output="basin" type="area" column="value"
+GISDBASE: G:\TechnicalNoteofPWRI\appendix\01_Terauchi\01_SET_BASIN\grass
+LOCATION: JGD2011 MAPSET: PERMANENT USER: a9651 DATE: Fri Nov 12 09:33:11 2021
+---------------------------------------------------------------------------------
+COMMAND: v.buffer --overwrite input="basin" layer="-1" type="point,line,area" output="basin_buf" distance=0.000833 angle=0 scale=1.0
+GISDBASE: G:\TechnicalNoteofPWRI\appendix\01_Terauchi\01_SET_BASIN\grass
+LOCATION: JGD2011 MAPSET: PERMANENT USER: a9651 DATE: Fri Nov 12 09:33:11 2021

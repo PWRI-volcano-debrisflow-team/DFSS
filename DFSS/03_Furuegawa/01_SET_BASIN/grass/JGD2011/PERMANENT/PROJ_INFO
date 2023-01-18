@@ -1,0 +1,4 @@
+name: JGD2011
+ellps: grs80
+proj: ll
+no_defs: defined

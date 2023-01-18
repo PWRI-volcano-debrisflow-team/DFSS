@@ -1,0 +1,10 @@
+372                          |iend(ncols)
+253                          |jend(nrows)
+
+'input/dem_30m.asc'          |dem
+'input/dir_30m.asc'          |dir
+
+-25545                       |x@outlet
+ 47595                       |y@outlet
+
+10                           |threshold (max acc)
