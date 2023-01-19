@@ -1,0 +1,6 @@
+425                          |iend(ncols)
+839                          |jend(nrows)
+
+'basin_10m.asc'        |basin
+'dem_10m.asc'          |dem
+'dir_10m.asc'          |dir

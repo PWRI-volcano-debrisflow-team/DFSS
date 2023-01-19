@@ -1,0 +1,28 @@
+--- DR_ver_1.0.f90	2021-11-12 20:26:49.060919000 +0900
++++ DR_ver_1.01.f90	2022-12-14 17:07:33.607211600 +0900
+@@ -8,6 +8,7 @@
+ ! CV | z  | z  | z  |
+ !    |from| i  | to |
+ !-------------------------------------------------------------------------------
++use omp_lib
+ implicit none
+ real(8), parameter :: PI=acos(-1.d0),deg2rad=PI/180.d0,rad2deg=180.d0/PI, &
+                       g=9.8d0,dtlim=0.001d0,cfl=0.01d0
+@@ -40,6 +41,17 @@
+ real(8), allocatable :: z_2d(:),va_out(:),vc_out(:),vf_out(:)
+ integer, allocatable :: iacc(:)
+ integer :: iaccmax,iacc_up
++! <-- CHECK Used CPU No.
++! ref https://tama.green.gifu-u.ac.jp/~tama/Memo/openmp.html
++ write(*,*) 'CHECK HOW MANY CPU USED'
++ write(*,*) 'before parallel'
++ !$omp parallel
++ write(*,*) 'Hello OpenMP'
++ !$omp end parallel
++ write(*,*) 'after parallel'
++ write(*,*) ''
++ write(*,*) 'START'
++! ---> CPU
+ !
+ open(1,file='DR_input.txt')
+ read(1,*)

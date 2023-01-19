@@ -1,0 +1,232 @@
+--- RR_ver_1.0.f90	2021-11-15 04:36:08.050343200 +0900
++++ RR_ver_1.01.f90	2022-12-08 14:37:29.130664000 +0900
+@@ -8,6 +8,7 @@
+ ! CV  | z  | z  | z |...| z |
+ !     | 1  | 2  | 3 |...|end|
+ !-------------------------------------------------------------------------------
++use omp_lib
+ implicit none
+ real(8), parameter :: PI=acos(-1.0d0),deg2rad=PI/180.0d0,rad2deg=180.0d0/PI, &
+                       g=9.8d0,dtlim=0.0001d0,cfl=0.01d0
+@@ -54,6 +55,17 @@
+ real(8) :: umax_1d,dtmin_h1d,h1,h2,ba,q_1d_total
+ real(8), allocatable :: x_2d_1d(:),y_2d_1d(:),vsl_out(:)
+ integer :: iend_1d,iflg_1d
++! <-- CHECK Used CPU No.
++! ref https://tama.green.gifu-u.ac.jp/~tama/Memo/openmp.html
++ write(*,*) 'CHECK HOW MANY CPU USED'
++ write(*,*) 'before parallel'
++ !$omp parallel
++ write(*,*) 'Hello OpenMP'
++ !$omp end parallel
++ write(*,*) 'after parallel'
++ write(*,*) ''
++ write(*,*) 'START'
++! ---> CPU
+ ! <--- 1d
+ !
+ open(1,file='RR_input.txt')
+@@ -121,7 +133,7 @@
+ else
+   d(:,:)=d_uni
+ end if
+-fname=trim(adjustl('output_misc/depth.asc'))
++fname=trim(adjustl('output_RR_misc/depth.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,d,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -132,7 +144,7 @@
+ else
+   n(:,:)=rn_uni
+ end if
+-fname=trim(adjustl('output_misc/roughness.asc'))
++fname=trim(adjustl('output_RR_misc/roughness.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,n,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -157,10 +169,10 @@
+ finf1(:,:)=(-d_vash(:,:)/vad0+1.d0)*finf1(:,:)
+ where(finf1(:,:)<0.d0)finf1(:,:)=0.d0
+ where(ibasin(:,:)/=0)finf2(:,:)=0.d0 !fs2
+-fname=trim(adjustl('output_misc/fs1_mm_h.asc'))
++fname=trim(adjustl('output_RR_misc/fs1_mm_h.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,finf1*3.6d+6,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+-fname=trim(adjustl('output_misc/fs2_mm_h.asc'))
++fname=trim(adjustl('output_RR_misc/fs2_mm_h.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,finf2*3.6d+6,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -171,7 +183,7 @@
+ else
+   lamda(:,:)=lam_uni
+ end if
+-fname=trim(adjustl('output_misc/lamda.asc'))
++fname=trim(adjustl('output_RR_misc/lamda.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,lamda,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -183,7 +195,7 @@
+   kk(:,:)=k_uni
+ end if
+ kk=kk/100.d0
+-fname=trim(adjustl('output_misc/k_cm_s.asc'))
++fname=trim(adjustl('output_RR_misc/k_cm_s.asc'))
+ cfmt='(*(e10.3))'
+ call w_fasc(20,fname,cfmt,kk*1.d+2,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -194,7 +206,7 @@
+ else
+   pwc(:,:)=pwc_uni
+ end if
+-fname=trim(adjustl('output_misc/pwc.asc'))
++fname=trim(adjustl('output_RR_misc/pwc.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,pwc,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -206,7 +218,7 @@
+   pw(:,:)=pw0
+ end if
+ where(ibasin(:,:)==0)pw(:,:)=0.d0
+-fname=trim(adjustl('output_misc/pw_ini.asc'))
++fname=trim(adjustl('output_RR_misc/pw_ini.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,pw,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -218,13 +230,13 @@
+     hs=hs0
+ end if
+ where(ibasin(:,:)==0)hs(:,:)=0.d0
+-fname=trim(adjustl('output_misc/hs_ini.asc'))
++fname=trim(adjustl('output_RR_misc/hs_ini.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,hs,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+ zs(:,:)=z(:,:)-d(:,:)
+ call cal_grad(iend,jend,dx,zs,grdave)
+-fname=trim(adjustl('output_misc/gradave.asc'))
++fname=trim(adjustl('output_RR_misc/gradave.asc'))
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,grdave*rad2deg,iend,jend,xllcorner,yllcorner,dx,-9999.0d0)
+ !
+@@ -264,7 +276,7 @@
+ !
+ m_cv(:,:)=(ibasin(:,:)/=0)
+ !
+-open(1,file='input/controlVolume_CenterPoint_inRR.txt')
++open(1,file='controlVolume_CenterPoint_inRR.txt')
+ read(1,*)n_ij_cv
+ allocate(ij_cv(n_ij_cv,2))
+ read(1,*)
+@@ -272,7 +284,7 @@
+   read(1,*)x,y,ij_cv(k,1:2)
+ end do
+ close(1)
+-open(1,file='input/fluxPoint_x_inRR.txt')
++open(1,file='fluxPoint_x_inRR.txt')
+ read(1,*)n_ij_u
+ allocate(ij_u(n_ij_u,2))
+ read(1,*)
+@@ -280,7 +292,7 @@
+   read(1,*)x,y,ij_u(k,1:2)
+ end do
+ close(1)
+-open(1,file='input/fluxPoint_y_inRR.txt')
++open(1,file='fluxPoint_y_inRR.txt')
+ read(1,*)n_ij_v
+ allocate(ij_v(n_ij_v,2))
+ read(1,*)
+@@ -288,7 +300,7 @@
+   read(1,*)x,y,ij_v(k,1:2)
+ end do
+ close(1)
+-open(1,file='input/fluxPoint_xBoudary_inRR.txt')
++open(1,file='fluxPoint_xBoudary_inRR.txt')
+ read(1,*)n_ij_u_we
+ allocate(ij_u_we(n_ij_u_we,8))
+ read(1,*)
+@@ -296,7 +308,7 @@
+   read(1,*)x,y,ij_u_we(k,:)
+ end do
+ close(1)
+-open(1,file='input/fluxPoint_yBoudary_inRR.txt')
++open(1,file='fluxPoint_yBoudary_inRR.txt')
+ read(1,*)n_ij_v_sn
+ allocate(ij_v_sn(n_ij_v_sn,8))
+ read(1,*)
+@@ -329,18 +341,18 @@
+     end if
+   end do
+ end do
+-fname='output_misc/rain_map.asc'
++fname='output_RR_misc/rain_map.asc'
+ cfmt='(*(f10.3))'
+ call w_fasc(20,fname,cfmt,rmap(:,:,0),iend,jend,xllcorner,yllcorner,dx,-9999.d0)
+ !
+ do k=1,n_rpnt
+   write(ctmp,'(i4.4)')k
+-  fname='output_misc/rain_map'//trim(ctmp)//'.asc'
++  fname='output_RR_misc/rain_map'//trim(ctmp)//'.asc'
+   cfmt='(*(f10.3))'
+   !call w_fasc(20,fname,cfmt,rmap(:,:,k),iend,jend,xllcorner,yllcorner,dx,-9999.d0)
+ end do
+ !
+-open(20,file='output_misc/basin_rain.txt')
++open(20,file='output_RR_misc/basin_rain.txt')
+ write(20,'(a)')'datetime,rain(mm),maxval'
+ !
+ rseries(:,:,:)=0.0d0
+@@ -384,7 +396,7 @@
+ close(11)
+ close(20)
+ !
+-fname='output_misc/rain_sum.asc'
++fname='output_RR_misc/rain_sum.asc'
+ r=0.d0
+ do k=0,rnum-1
+  r(:,:)=r(:,:)+(rseries(:,:,k))*rdt*1000.
+@@ -400,7 +412,7 @@
+ ! <--- rain and eva
+ !
+ ! ---> 1d
+-open(10,file='input/streamConfiguration_inRR.txt')
++open(10,file='streamConfiguration_inRR.txt')
+ read(10,*)iend_1d
+ i=iend_1d
+ !
+@@ -433,7 +445,7 @@
+ ni_scal=count(mask_1d)
+ allocate(i_scal(ni_scal))
+ i_scal(1:ni_scal)=pack(i_node(:),mask_1d)
+-open(20,file='output_misc/scal_point.txt')
++open(20,file='output_RR_misc/scal_point.txt')
+ write(20,*)'x(s(i)),y(s(i)),s(i),i'
+ do i=1,ni_scal
+   write(20,'(2(f15.5,:'',''),2(i5,:'',''))')x_2d_1d(i_scal(i)),y_2d_1d(i_scal(i)),i_scal(i),i
+@@ -444,7 +456,7 @@
+ ni_vect=count(mask_1d)
+ allocate(i_vect(ni_vect))
+ i_vect(1:ni_vect)=pack(i_node(:),mask_1d)
+-open(20,file='output_misc/vect_point.txt')
++open(20,file='output_RR_misc/vect_point.txt')
+ write(20,*)'x(v(i)),y(v(i)),dist,deg,i,i_to'
+ do i=1,ni_vect
+   x=x_2d_1d(i_vect(i))
+@@ -473,7 +485,7 @@
+ ni_inlet=count(mask_1d)
+ allocate(i_inlet(ni_inlet))
+ i_inlet(1:ni_inlet)=pack(i_node(:),mask_1d)
+-open(20,file='output_misc/inlet_point.txt')
++open(20,file='output_RR_misc/inlet_point.txt')
+ write(20,*)'x(s(i)),y(s(i)),s(i),i'
+ do i=1,ni_inlet
+   write(20,'(2(f15.5,:'',''),2(i5,:'',''))')x_2d_1d(i_inlet(i)),y_2d_1d(i_inlet(i)),i_inlet(i),i
+@@ -484,7 +496,7 @@
+ ni_outlet=count(mask_1d)
+ allocate(i_outlet(ni_outlet))
+ i_outlet(1:ni_outlet)=pack(i_node(:),mask_1d)
+-open(20,file='output_misc/outlet_point.txt')
++open(20,file='output_RR_misc/outlet_point.txt')
+ write(20,*)'x(s(i)),y(s(i)),s(i),i'
+ do i=1,ni_outlet
+   write(20,'(2(f15.5,:'',''),2(i5,:'',''))')x_2d_1d(i_outlet(i)),y_2d_1d(i_outlet(i)),i_outlet(i),i

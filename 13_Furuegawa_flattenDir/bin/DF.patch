@@ -1,0 +1,199 @@
+--- DF_ver_1.0.f90	2021-11-15 04:39:53.033435000 +0900
++++ DF_ver_1.01.f90	2022-12-14 18:44:00.581053100 +0900
+@@ -8,6 +8,7 @@
+ ! CV  | z  | z  | z |...| z |
+ !     | 1  | 2  | 3 |...|end|
+ !-------------------------------------------------------------------------------
++use omp_lib
+ implicit none
+ real(8), parameter :: PI=acos(-1.d0),deg2rad=PI/180.d0,rad2deg=180.d0/PI, &
+                       g=9.8d0,u2=0.35d0,dtlim=0.0001d0,cfl=0.01d0
+@@ -62,6 +63,17 @@
+ character :: cline*1000
+ !
+ character(len=100) :: fname,ctmp,cfmt,out_dir
++! <-- CHECK Used CPU No.
++! ref https://tama.green.gifu-u.ac.jp/~tama/Memo/openmp.html
++ write(*,*) 'CHECK HOW MANY CPU USED'
++ write(*,*) 'before parallel'
++ !$omp parallel
++ write(*,*) 'Hello OpenMP'
++ !$omp end parallel
++ write(*,*) 'after parallel'
++ write(*,*) ''
++ write(*,*) 'START'
++! ---> CPU
+ !
+ open(1,file='DF_input.txt')
+ read(1,*) ! grid
+@@ -100,7 +112,7 @@
+ call r_iasc(10,fname,ibasin(:,:),iend,jend,xllcorner,yllcorner,cellsize)
+ !
+ ifld(:,:)=0
+-!fname='input/fld.asc'
++!fname='fld.asc'
+ !call r_iasc(10,fname,ifld(:,:),iend,jend,xllcorner,yllcorner,cellsize)
+ !open(11,file='ifld_in.txt')
+ !read(11,*)nifld
+@@ -173,7 +185,7 @@
+ allocate(mvals((nsci+nscj)*3))
+ !
+ ! ---> set cv & flux
+-open(1,file='input/controlVolume_centerPoint_inDF.txt')
++open(1,file='controlVolume_centerPoint_inDF.txt')
+ read(1,*)n_ij_cv
+ allocate(ij_cv(n_ij_cv,2))
+ read(1,*)
+@@ -182,7 +194,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_x_inDF.txt')
++open(1,file='fluxPoint_x_inDF.txt')
+ read(1,*)n_ij_u
+ allocate(ij_u(n_ij_u,2))
+ read(1,*)
+@@ -191,7 +203,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_y_inDF.txt')
++open(1,file='fluxPoint_y_inDF.txt')
+ read(1,*)n_ij_v
+ allocate(ij_v(n_ij_v,2))
+ read(1,*)
+@@ -200,7 +212,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_xBoudary_inDF.txt')
++open(1,file='fluxPoint_xBoudary_inDF.txt')
+ read(1,*)n_ij_u_we
+ allocate(ij_u_we(n_ij_u_we,2))
+ read(1,*)
+@@ -209,7 +221,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_yBoudary_inDF.txt')
++open(1,file='fluxPoint_yBoudary_inDF.txt')
+ read(1,*)n_ij_v_sn
+ allocate(ij_v_sn(n_ij_v_sn,2))
+ read(1,*)
+@@ -218,7 +230,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_wBoudary_inDF.txt')
++open(1,file='fluxPoint_wBoudary_inDF.txt')
+ read(1,*)n_ij_w
+ allocate(ij_w(n_ij_w,2))
+ read(1,*)
+@@ -227,7 +239,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_eBoudary_inDF.txt')
++open(1,file='fluxPoint_eBoudary_inDF.txt')
+ read(1,*)n_ij_e
+ allocate(ij_e(n_ij_e,2))
+ read(1,*)
+@@ -236,7 +248,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_sBoudary_inDF.txt')
++open(1,file='fluxPoint_sBoudary_inDF.txt')
+ read(1,*)n_ij_s
+ allocate(ij_s(n_ij_s,2))
+ read(1,*)
+@@ -245,7 +257,7 @@
+ end do
+ close(1)
+ !
+-open(1,file='input/fluxPoint_nBoudary_inDF.txt')
++open(1,file='fluxPoint_nBoudary_inDF.txt')
+ read(1,*)n_ij_n
+ allocate(ij_n(n_ij_n,2))
+ read(1,*)
+@@ -255,7 +267,7 @@
+ close(1)
+ ! <--- set cv & flux
+ !
+-!open(10,file='input/bound.dat')
++!open(10,file='bound.dat')
+ !do i=0,qnum ! i=0: initial
+ !  read(10,*)qin0(i),cin0(i)
+ !end do
+@@ -264,7 +276,7 @@
+ !close(10)
+ !
+ ! ---> set vol from 1d
+-open(10,file='input/streamConfiguration_inRR.txt')
++open(10,file='streamConfiguration_inRR.txt')
+ read(10,*)iend_1d
+ allocate(ij_1d2d(iend_1d,2,1),xy_1d2d(iend_1d,2))
+ read(10,*)
+@@ -276,7 +288,7 @@
+ close(10)
+ deallocate(ij_1d2d)
+ !
+-open(10,file='input/streamFloodplainConnection.txt')
++open(10,file='streamFloodplainConnection.txt')
+ read(10,*)itr_vin
+ read(10,*)
+ itmp=0
+@@ -297,7 +309,7 @@
+ end if
+ !
+ allocate(ij_1d2d(n_ivin,2,itr_vin),i_1d(n_ivin,itr_vin))
+-open(10,file='input/streamFloodplainConnection.txt')
++open(10,file='streamFloodplainConnection.txt')
+ read(10,*)
+ read(10,*)
+ do i=1,n_ivin
+@@ -308,7 +320,7 @@
+ close(10)
+ !
+ allocate(va_in(iend_1d))
+-open(10,file='./input/flowVolume_ws_DRtoDF.txt')
++open(10,file='flowVolume_ws_DRtoDF.txt')
+ do i=1,qnum
+   read(10,'(a10,i10,*(E20.10e3))')ctmp,k,va_in(:)
+ end do
+@@ -326,7 +338,7 @@
+ allocate(ivin(n_ivin))
+ allocate(ij_1d2d(n_ivin,2,itr_vin),i_1d(n_ivin,itr_vin))
+ !
+-open(10,file='input/streamFloodplainConnection.txt')
++open(10,file='streamFloodplainConnection.txt')
+ read(10,*)
+ read(10,*)
+ k=0
+@@ -361,7 +373,7 @@
+ va_in=0.d0
+ vcc_in=0.d0
+ vcf_in=0.d0
+-open(10,file='./input/flowVolume_ws_DRtoDF.txt')
++open(10,file='flowVolume_ws_DRtoDF.txt')
+ do i=0,qnum-1 ! i=0: initial
+   read(10,'(a10,i10,*(E20.10e3))')ctmp,k,va_in0(i,:)
+   if(i==0)then
+@@ -375,7 +387,7 @@
+ va_in0(qnum,:)=va_in0(qnum-1,:)
+ va_in0(:,:)=va_in0(:,:)/(cellsize*cellsize*qdt)
+ !
+-open(10,file='./input/flowVolume_cs_DRtoDF.txt')
++open(10,file='flowVolume_cs_DRtoDF.txt')
+ do i=0,qnum-1 ! i=0: initial
+   read(10,'(a10,i10,*(E20.10e3))')ctmp,k,vcc_in0(i,:)
+   if(i==0)then
+@@ -389,7 +401,7 @@
+ vcc_in0(qnum,:)=vcc_in0(qnum-1,:)
+ vcc_in0(:,:)=vcc_in0(:,:)/(cellsize*cellsize*qdt)
+ !
+-open(10,file='./input/flowVolume_fs_DRtoDF.txt')
++open(10,file='flowVolume_fs_DRtoDF.txt')
+ do i=0,qnum-1 ! i=0: initial
+   read(10,'(a10,i10,*(E20.10e3))')ctmp,k,vcf_in0(i,:)
+   if(i==0)then

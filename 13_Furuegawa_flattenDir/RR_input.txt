@@ -1,0 +1,41 @@
+          setting of grids              |
+168                                     |iend(-)
+308                                     |jend(-)
+30.d0                                   |dx(m)
+30.d0                                   |dy(m) ! dummy
+          setting of time               |
+600.d0                                  |dt(sec): main dt
+600.d0                                  |output_f_time(sec): output file intervel
+600.d0                                  |output_d_time(sec): output display intervel ---> tFV file
+          setting of rain               |
+'rain_Aso.txt'                    |rain file
+25                                      |rnum+1: number of rain data (from 0 to rnum)
+3600.d0                                 |rdt(sec): dt of rain data
+          setting of topo               |
+'elevation_inRR.asc'              |z(m): elevation
+'targetArea_inRR.asc'             |basin flag, 0:out of basin 1,2,3,,,:basin
+'flowAcc_inRR.asc'                |flow accumilation
+'flowDir_inRR.asc'                |flow direction
+'volcanicAsh_inRR.asc'            |d_vash(m): depth of volcanic ash
+0.1d0                                   |vad0(m) depth of ash when fs1=0
+          setting of soil               |0:from this file, 1:from other file
+0  2.d0        'io/depth.asc'           |d(m): soil depth
+0  0.1d0       'io/roughness.asc'       |rn(): equivalent roughness
+0  36.d0       'io/fs1_mm_h.asc'        |fs1(mm/h): surface infiltration
+0  36.d0       'io/fs2_mm_h.asc'        |fs2(mm/h): infiltration to lower layer
+0  0.43d0      'io/lamda.asc'           |lamda(-): porosity
+0  0.001d0     'io/k_cm_s.asc'          |ks(cm/s): saturated hydraulic conductivity
+0  0.045d0     'io/pwc.asc'             |pwc(-): clitic vwc for subsurface flow initiation
+0  0.045d0     'io/pw_ini.asc'          |pw_ini(-): initial soil vwc
+0  0.d0        'io/hs_ini.asc'          |hs_ini(m): initial hs
+                                        |
+0.01d0                                  |hthr(m): threshold of water depth to move
+          setting of stream             |
+0                                       |iflg_1d 0:from this file, 1:from 'streamConfiguration_inRR.txt'
+0.05d0                                  |rn_1d(): Maning's roughness
+0.d0                                    |wid_m |Width & depth Tanaka & Sayama 2018 DPRI
+0.d0                                    |wid_p |width=m*area**p
+15.d0                                   |wid_min
+0.d0                                    |dep_m |depth=m*area**p
+0.2d0                                   |dep_p |z_1d=z_2d-depth
+2.d0                                    |dep_min

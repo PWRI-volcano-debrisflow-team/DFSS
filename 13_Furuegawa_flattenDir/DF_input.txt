@@ -1,0 +1,42 @@
+﻿          setting of grids              |
+425                                     |iend(-)
+839                                     |jend(-)
+10.d0                                   |dx(m)
+10.d0                                   |dy(m) ! dummy
+          setting of time               |
+10.d0                                   |dt(sec): main dt
+100.d0                                  |output_d_time(sec): output display intervel
+600.d0                                  |output_f_time(sec): output file intervel
+          setting of rain               |   
+'rain_Aso.txt'                    |rain file
+25                                      |rnum+1: number of rain data (from 0 to rnum)
+3600.d0                                 |rdt(sec): dt of rain data
+! v from 2d (end time)                  |
+145                                     |qnum+1: number of v from 2d data (from 0 to qnum)
+600                                     |qdt (sec) output_d_time of DR_input
+          setting of topo               |
+'elevation_inDF.asc'            |z(m): elevation
+'targetArea_inDF.asc'           |basin flag, 0:out of basin 1,2,3,,,:basin
+'flowDir_inDF.asc'              |flow direction
+'d.asc'                         |d(m): soil depth
+'hs_ini.asc'                    |hs_ini(m): initial hs
+          setting of soil               |
+0.01d0                                  |dm (m)
+0.6d0                                   |csta
+0.2d0                                   |pf
+1000.d0                                 |rhw (kg/cm3)
+2650.d0                                 |sig (kg/m3)
+35.d0                                   |tan phi (deg)
+3000.d0                                 |coh (N/m2)
+0.001d0                                 |ks (m/s)
+0.5d0                                   |roughness ! dummy
+0.01d0                                  |hthr(m): threshold of water depth to move
+          flux output                   |
+1                                       |number of output i-section
+1,1,1                                   |i,jsta,jend
+5                                       |number of output j-section
+16,1,143                                |j,ista,iend
+17,1,143                                |j,ista,iend
+18,1,143                                |j,ista,iend
+166,1,143                               |j,ista,iend
+316,1,143                               |j,ista,iend

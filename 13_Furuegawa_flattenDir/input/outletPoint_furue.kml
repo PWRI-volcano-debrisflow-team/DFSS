@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<Style id="PolyStyle1">
+  <IconStyle>
+  <Icon>
+  <href>https://maps.gsi.go.jp/portal/sys/v4/symbols/080.png</href>
+  </Icon>
+  <scale>1</scale>
+  </IconStyle>
+</Style>
+<Placemark>
+<styleUrl>#PolyStyle1</styleUrl>
+<Point>
+<coordinates>131.13319873809817,32.95852654913412</coordinates>
+</Point>
+</Placemark>
+</Document>
+</kml>
