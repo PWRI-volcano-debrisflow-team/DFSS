@@ -66,7 +66,7 @@ gfortran -fopenmp DF_ver_1.01.f90 -o DF_ver_1.01_omp.exe
 
 以下の処理を行なうことで、DFSS の計算に必要な入力ファイルが得られます。
 
-+ 地形データは、[Open Source GRASS GIS](https://grass.osgeo.org/) によるGIS処理による測地系変換やリサンプリング、傾斜処理を実施して、`./dem_10m.asc, ./dir_10m.asc, ./dem_30m.asc, ./dir_30m.asc` に変換
++ 地形データは、[Open Source GRASS GIS](https://grass.osgeo.org/) を使ったGIS処理による測地系変換やリサンプリング、傾斜処理を実施して、`./dem_10m.asc, ./dir_10m.asc, ./dem_30m.asc, ./dir_30m.asc` に変換
 + 雨量データは、DFSS形式の雨量データに `./rain_Aso.txt` に変換
 
 詳細は `../03_furuegawa/01_SET_BASIN` および `../03_furuegawa/02_MK_TOPO` を参照してください。なお、傾斜量のラスターデータ (`./dir_*m.asc`) は `GRASS GIS` による `r.watershed, r.fill.dir` によるアルゴリズムで得ることを想定しています。他の GIS ソフトウェアの処理では上手く動作しない例が確認されています。
@@ -90,14 +90,14 @@ gfortran -fopenmp DF_ver_1.01.f90 -o DF_ver_1.01_omp.exe
 `./` がカレントディレクトリの場合に、コアを8つ使用するには以下のコマンドで実行できます。
 ```
 set OMP_NUM_THREADS=8
-./bin/01_mk_topographyFiles.exe
-./bin/02_mk_watershedConfigurationFiles.exe
-./bin/03_mk_streamConfigurationFiles.exe
-./bin/11_mk_floodplainConfigurationFiles.exe
-./bin/12_mk_streamFloodplainConnectionFiles.exe
-./bin/RR_ver_1.1_omp.exe
-./bin/DR_ver_1.1_omp.exe
-./bin/DF_ver_1.1_omp.exe
+bin\01_mk_topographyFiles.exe
+bin\02_mk_watershedConfigurationFiles.exe
+bin\03_mk_streamConfigurationFiles.exe
+bin\11_mk_floodplainConfigurationFiles.exe
+bin\12_mk_streamFloodplainConnectionFiles.exe
+bin\RR_ver_1.01_omp.exe
+bin\DR_ver_1.01_omp.exe
+bin\DF_ver_1.01_omp.exe
 ```
 
-なお、`cmd.exe` と `zsh` でパス区切り文字が異なるため、使用環境にあわせて適宜変更してください。
+なお、上に示した `cmd.exe` と `zsh` ではパス区切り文字が異なるため、使用環境にあわせて適宜変更してください。
