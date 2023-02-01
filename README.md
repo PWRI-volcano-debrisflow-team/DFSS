@@ -19,8 +19,9 @@ DFSSは、近年、降雨や空中写真、標高データなどの時間・空�
 3. 著作者および関係者は一切のサポートを行わないこと
 
 
-なお、1．著作権表示について、著作権者は土木研究所となります。利用した場合は下に示す参考文献を引用してください。
-2．継承について、本ライセンスは GPL v3 に相当するため、改変したコードはオープンソースプログラムにしなければなりません。
+## 注意事項
+1．著作権表示について、著作権者は土木研究所となります。利用した場合は下に示す参考文献を引用してください。
+2．継承について、本ライセンスは GPL v3 に相当するため、変更したコードを業務や研究で使用した場合には同じライセンスを付けたオープンソースプログラムにしなければなりません。
 
 
 # ライセンス
@@ -32,9 +33,9 @@ DFSSは、近年、降雨や空中写真、標高データなどの時間・空�
 
 # 参考文献
 
-[1] 山崎祐介・清水武志・石井靖雄・石田孝司：降雨流出解析と連動した土石流の流出・氾濫解析法, 土木研究所資料, 第4419号, 52 p., 土木研究所, 2022, https://thesis.pwri.go.jp/files/900243753637c10176f559.pdf
+[1] 山崎祐介・清水武志・石井靖雄・石田孝司：降雨流出解析と連動した土石流の流出・氾濫解析法, 土木研究所資料, 第4419号, 52 p., 土木研究所, 2022, https://thesis.pwri.go.jp/public_detail/100007/
 
-[2] Takeshi SHIMIZU, Yusuke YAMAZAKI, Naoki IMAMORI, Introduction to an open source Debris Flow Simulator for 'SABO': DFSS, 8th Internatinational Conference on Debris Flow Hazard Mitigation, 2023 （予定）
+[2] Takeshi SHIMIZU, Yusuke YAMAZAKI, Naoki IMAMORI, Development of an open source Debris Flow Simulator for "SABO": DFSS, 8th Internatinational Conference on Debris Flow Hazard Mitigation, 2023 （予定）
 
 
 # 引用文献
