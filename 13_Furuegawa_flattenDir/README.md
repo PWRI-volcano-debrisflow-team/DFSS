@@ -59,11 +59,11 @@ gfortran -fopenmp DF_ver_1.01.f90 -o DF_ver_1.01_omp.exe
 `*.txt` のうち，`./topographyConfiguration.txt, ./RR_input.txt` 等は，パラメータファイルです。
 
 
-パラメータファイルの作成方法はここには記しません。参考文献 [1] をご確認ください。
+パラメータファイルの作成方法はここには記しません。`../README.md` に示した参考文献 [1] をご確認ください。
 
 このフォルダではこれらの前処理は実施済みという段階ですが，地形データと雨量データは以下の処理を行なうことで，DFSS の計算に必要な入力ファイルが得られます。
 
-+ 地形データは，[Open Source GRASS GIS](https://grass.osgeo.org/) を使ったGIS処理による測地系変換やリサンプリング，方位計算処理を実施して，`./dem_10m.asc, ./dir_10m.asc, ./dem_30m.asc, ./dir_30m.asc` に変換
++ 地形データは，[Open Source GRASS GIS](https://grass.osgeo.org/) を使ったGIS処理による測地系変換やリサンプリング，方位計算処理を実施して，`./dem_10m.asc, ./dir_10m.asc, ./dem_30m.asc, ./dir_30m.asc` に変換（`_30m`, `_10m` はそれぞれ上流域，下流域の計算用データ）
 + 雨量データは，DFSS形式の雨量データに `./rain_Aso.txt` に変換
 
 
