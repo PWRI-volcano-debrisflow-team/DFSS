@@ -263,7 +263,7 @@ python bin_fig/RR_out_hydro.py 2406
 節点番号はコンマ区切りで複数点与えることができます。
 
 ```
-python bin_fig/RR_out_hydro.py 2406,1506
+python bin_fig/RR_out_hydro.py 2406,1574
 ```
 
 ![](./img/RR_hydro_2pts.png)
