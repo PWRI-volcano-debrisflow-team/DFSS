@@ -94,12 +94,6 @@ def make_DR_fig(loc=[], SKIP=1):
             qc=np.append([0],(qca.T[i][1:]-qca.T[i][:-1])/dt)
             qf=np.append([0],(qfa.T[i][1:]-qfa.T[i][:-1])/dt)
             #
-            # ax[0].plot(time,q,lw=0.5,color='k',ls='-',marker='',label='water & sed.')
-            # ax2[0].plot(time,qa.T[i],lw=0.5,color='k',ls='--',marker='',label='No.%d'%loc[i])
-            # ax[1].plot(time,qc,lw=0.5,color='k',ls='-',marker='',label='coarse sed.')
-            # ax2[1].plot(time,qca.T[i],lw=0.5,color='k',ls='--',marker='',label='No.%d'%loc[i])
-            # ax[2].plot(time,qf,lw=0.5,color='k',ls='-',marker='',label='fine sed.')
-            # ax2[2].plot(time,qfa.T[i],lw=0.5,color='k',ls='--',marker='',label='No.%d'%loc[i])
             cc = np.where(q > 0.0, qc/q, 0.0)
             cf = np.where(q > 0.0, qf/q, 0.0)
             fname = "DR_hydro_at_" + str(loc[i]) + ".csv"
@@ -119,19 +113,20 @@ def make_DR_fig(loc=[], SKIP=1):
             ax[2].plot(time,qf,lw=0.5,color='k',ls='-',marker='',label='fine sed.')
             ax2[2].plot(time,qfa.T[i],lw=0.5,color='k',ls='--',marker='',label='No.%d'%loc[i])
             ti=['(a)','(b)','(c)']
-            for ii in range(3):
+            for iii in range(3):
+                # '3' means num of panels such as discharge, cc, cf
                 # ax[i].set_xlim(datetime.datetime(1990,7,2,8), datetime.datetime(1990,7,2,14))
-                ax[ii].set_xlim(time[0], time[-1])
-                if i==0: ax[ii].set_ylabel(u'Discharge (m$^3$/s) at {}'.format(str(loc[i])), fontsize=fsize)
-                if i<3: ax[ii].axes.xaxis.set_ticklabels([])
-                ax[ii].set_ylim(0,)
-                ax[ii].legend(loc='center right',fontsize=fsize)
+                ax[iii].set_xlim(time[0], time[-1])
+                if iii==1: ax[iii].set_ylabel(u'Discharge (m$^3$/s) at {}'.format(str(loc[i])), fontsize=fsize)
+                if iii<3: ax[iii].axes.xaxis.set_ticklabels([])
+                ax[iii].set_ylim(0,)
+                ax[iii].legend(loc='center right',fontsize=fsize)
                 #ax2=ax[i].twinx()
                 #ax2[i].yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
-                ax2[ii].ticklabel_format(style='sci',axis='y',scilimits=(0,0))
-                ax2[ii].set_ylim(0,)
-                if i==0: ax2[ii].set_ylabel(u'Volume (m$^3$)',fontsize=fsize)
-                ax2[ii].annotate('%s'%ti[i], xy=[0., 0.], xytext=[0.02,0.79], xycoords='axes fraction')
+                ax2[iii].ticklabel_format(style='sci',axis='y',scilimits=(0,0))
+                ax2[iii].set_ylim(0,)
+                if i==0: ax2[iii].set_ylabel(u'Volume (m$^3$)',fontsize=fsize)
+                ax2[iii].annotate('%s'%ti[i], xy=[0., 0.], xytext=[0.02,0.79], xycoords='axes fraction')
             #ax[0].axes.xaxis.set_ticklabels([])
             #ax[1].axes.xaxis.set_ticklabels([])
             #ax3=ax[2].twinx()
